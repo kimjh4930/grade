@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 
 public class Calculator {
@@ -37,6 +39,21 @@ public class Calculator {
 		}catch(FileNotFoundException ex){
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 			
+		}
+		
+		return null;
+	}
+	
+	public String analyzeFile(String line){
+		numberApiKey = "\\d{1,3}";
+		
+		String numberInfo = String.format(numberApiKey);
+		Pattern numberPattern = Pattern.compile(numberInfo);
+		Matcher numberPatternMatches = numberPattern.matcher(line);
+		
+		if(numberPatternMatches.find()){
+			String matchResult = numberPatternMatches.group(0).trim();
+			//여기에 점수 판별하는 메소드를 불러오면 될 것 같음.
 		}
 		
 		return null;
