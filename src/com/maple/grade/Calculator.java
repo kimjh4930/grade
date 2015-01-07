@@ -24,6 +24,8 @@ public class Calculator {
 	
 	public String loadFileInfo() throws IOException {
 		
+		Calculator cal = new Calculator();
+		
 		try{
 			File inFile = new File("gradeInfo.txt");
 			fstream = new FileInputStream(inFile);
@@ -33,6 +35,7 @@ public class Calculator {
 			//한 줄씩 불러들임
 			while((line = br.readLine()) != null && line != ""){
 				
+				System.out.println(cal.analyzeFile(line));
 			}
 			
 			
@@ -40,23 +43,26 @@ public class Calculator {
 			Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, null, ex);
 			
 		}
-		
+		//리스트를 반환하면 좋을 것 같음.
 		return null;
 	}
 	
 	public String analyzeFile(String line){
-		numberApiKey = "\\d{1,3}";
+		String numberApiKey = "\\d{1,3}";
+		int point=0;
 		
 		String numberInfo = String.format(numberApiKey);
 		Pattern numberPattern = Pattern.compile(numberInfo);
 		Matcher numberPatternMatches = numberPattern.matcher(line);
+		Calculator cal = new Calculator();
 		
 		if(numberPatternMatches.find()){
 			String matchResult = numberPatternMatches.group(0).trim();
-			//여기에 점수 판별하는 메소드를 불러오면 될 것 같음.
+			point = Integer.parseInt(matchResult);
+			
 		}
 		
-		return null;
+		return cal.convertPointToGrade(point);
 	}
 	
 	public String convertPointToGrade(int point){
