@@ -41,5 +41,22 @@ public class Calculator {
 		
 		return null;
 	}
+	
+	public String convertPointToGrade(int point){
+		
+		String Grade = null;
+		
+		switch(point/10){
+		case 10 :
+		case 9 : Grade = "A"; break;
+		case 8 : Grade = "B"; break;
+		case 7 : Grade = "C"; break;
+		case 6 : Grade = "D"; break;
+		case 5 : Grade = "F"; break;
+		
+		}
+		
+		return Grade;
+	}
 
 }
