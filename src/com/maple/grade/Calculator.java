@@ -7,6 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -17,14 +18,20 @@ public class Calculator {
 	
 	private FileInputStream fstream = null;
 	private String line = null;
+	private String lineResult = null;
 	private String number = null;
 	private String subjectName = null;
 	private String numberApiKey = null;
 	private String subjectNameApiKey = null;
+	private double sumCredit = 0;
+	private double averageCredit = 0.0;
+	private int numOfSubject = 0;
+	private ArrayList<String> resultList;
 	
-	public String loadFileInfo() throws IOException {
+	public ArrayList<String> loadFileInfo() throws IOException {
 		
 		Calculator cal = new Calculator();
+		resultList = new ArrayList<String>();
 		
 		try{
 			File inFile = new File("gradeInfo.txt");
@@ -34,9 +41,13 @@ public class Calculator {
 			
 			//한 줄씩 불러들임
 			while((line = br.readLine()) != null && line != ""){
-				
-				System.out.println(cal.analyzeFile(line));
+				numOfSubject++;
+				sumCredit = sumCredit + cal.analyzeFile(line).getCredit();
+				resultList.add(line + " " + cal.analyzeFile(line).getGrade() + "\n");
 			}
+			
+			averageCredit = sumCredit / numOfSubject;
+			resultList.add("\n평점평균 : " + averageCredit);
 			
 			
 		}catch(FileNotFoundException ex){
@@ -44,10 +55,10 @@ public class Calculator {
 			
 		}
 		//리스트를 반환하면 좋을 것 같음.
-		return null;
+		return resultList;
 	}
 	
-	public String analyzeFile(String line){
+	public GradeConvertModel analyzeFile(String line){
 		String numberApiKey = "\\d{1,3}";
 		int point=0;
 		
@@ -65,21 +76,31 @@ public class Calculator {
 		return cal.convertPointToGrade(point);
 	}
 	
-	public String convertPointToGrade(int point){
+	public GradeConvertModel convertPointToGrade(int point){
 		
-		String Grade = null;
+		String grade=null;
+		double credit=0;
+		
+		GradeConvertModel gradeConvertModel = new GradeConvertModel();
 		
 		switch(point/10){
 		case 10 :
-		case 9 : Grade = "A"; break;
-		case 8 : Grade = "B"; break;
-		case 7 : Grade = "C"; break;
-		case 6 : Grade = "D"; break;
-		case 5 : Grade = "F"; break;
-		
+		case 9 : grade = "A"; 
+				 credit = 4.0; break;
+		case 8 : grade = "B"; 
+				 credit = 3.0; break;
+		case 7 : grade = "C";
+		  		 credit = 2.0; break;
+		case 6 : grade = "D";
+				 credit = 1.0; break;
+		case 5 : 
+		default : grade = "F"; 
+				  credit = 0.0; break;
 		}
 		
-		return Grade;
+		gradeConvertModel.setGrade(grade);
+		gradeConvertModel.setCredit(credit);
+		
+		return gradeConvertModel;
 	}
-
 }

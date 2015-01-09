@@ -1,16 +1,17 @@
 package com.maple.grade;
 
-import java.io.IOException;
+import java.util.ArrayList;
 
 public class Main {
+	
+	private static ArrayList<String> result;
 
 	public static void main(String args[]){
-		Calculator calculator = new Calculator();
 		
-		try{
-			calculator.loadFileInfo();
-		}catch (IOException e){
-			e.printStackTrace();
-		}
+		result = new ArrayList<String>();
+		Printer printer = new Printer();
+		
+		result = printer.inputFromFile();
+		printer.outToFile(result);
 	}
 }
